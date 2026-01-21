@@ -3,6 +3,10 @@ export interface Product {
   name: string;
   description: string;
   logo: string;
-  releaseDate: Date;
-  restructureDate: Date;
+  date_release: string;
+  date_revision: string;
+}
+
+export interface ProductsResponse {
+  data: Product[];
 }

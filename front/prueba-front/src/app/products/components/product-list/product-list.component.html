@@ -1,0 +1,42 @@
+<p>product-list works!</p>
+<header class="header">
+  <div class="logo">
+    <span class="logo-icon">💳</span>
+    <span class="logo-text">BANCO</span>
+  </div>
+</header>
+<div class="search-section">
+  <input type="text" class="search-input" placeholder="Search..." />
+</div>
+<div class="table-card">
+  <table class="products-table">
+    <thead>
+      <tr>
+        <th>Logo</th>
+        <th>Nombre del producto</th>
+        <th>Descripción <i class="info-icon">ℹ️</i></th>
+        <th>Fecha de liberación <i class="info-icon">ℹ️</i></th>
+        <th>Fecha de reestructuración <i class="info-icon">ℹ️</i></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products">
+        <td>
+          <div class="avatar">{{ getInitials(product.name) }}</div>
+        </td>
+        <td>{{ product.name }}</td>
+        <td>{{ product.description }}</td>
+        <td>{{ formatDate(product.date_release) }}</td>
+        <td>{{ formatDate(product.date_revision) }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="table-footer">
+  <span class="results-count">{{ products.length }} Resultados</span>
+  <select class="page-size-selector">
+    <option value="5">5</option>
+    <option value="10">10</option>
+    <option value="20">20</option>
+  </select>
+</div>
