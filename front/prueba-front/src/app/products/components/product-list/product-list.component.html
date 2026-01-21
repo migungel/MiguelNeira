@@ -7,6 +7,7 @@
 <div class="search-section">
   <input type="text" class="search-input" placeholder="Search..."
     (input)="onSearchChange($event.target.value)"/>
+  <button class="add-button btn btn-primary" (click)="navigateToAddProduct()">Agregar</button>
 </div>
 <div class="table-card">
   <table class="products-table">
@@ -34,7 +35,7 @@
 </div>
 <div class="table-footer">
   <span class="results-count">{{ filteredProducts.length }} Resultados</span>
-  <select class="page-size-selector" [value]="pageSize" #pageSelect (change)="onPageSizeChange(pageSelect.value)">
+  <select class="page-size-selector" #pageSelect (change)="onPageSizeChange(pageSelect.value)">
     <option value="5">5</option>
     <option value="10">10</option>
     <option value="20">20</option>

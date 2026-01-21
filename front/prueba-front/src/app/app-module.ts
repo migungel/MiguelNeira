@@ -3,6 +3,7 @@ import { BrowserModule, provideClientHydration, withEventReplay } from '@angular
 
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import { App } from './app';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule,
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

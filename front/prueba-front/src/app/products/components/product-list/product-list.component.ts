@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from '../../models/product.model';
 import { ProductsService } from '../../services/products.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
@@ -16,7 +17,10 @@ export class ProductListComponent implements OnInit {
   currentPage: number = 1;
   paginatedProducts: Product[] = [];
 
-  constructor(private productsService: ProductsService) {}
+  constructor(
+    private productsService: ProductsService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadProducts();
@@ -24,6 +28,7 @@ export class ProductListComponent implements OnInit {
 
   /* Paginacion */
   onPageSizeChange(size: string): void {
+    console.log('Changing page size to:', size);
     this.pageSize = parseInt(size);
     this.currentPage = 1;
     this.updatePaginatedProducts();
@@ -75,13 +80,13 @@ export class ProductListComponent implements OnInit {
     // this.filterProducts();
     if (!this.searchField.trim()) {
       this.filteredProducts = this.products;
-      return;
+    } else {
+      const searchLower = this.searchField.toLowerCase();
+      this.filteredProducts = this.products.filter(product =>
+        product.name.toLowerCase().includes(searchLower) ||
+        product.description.toLowerCase().includes(searchLower)
+      );
     }
-    const searchLower = this.searchField.toLowerCase();
-    this.filteredProducts = this.products.filter(product =>
-      product.name.toLowerCase().includes(searchLower) ||
-      product.description.toLowerCase().includes(searchLower)
-    );
     this.currentPage = 1;
     this.updatePaginatedProducts();
   }
@@ -96,5 +101,11 @@ export class ProductListComponent implements OnInit {
       product.name.toLowerCase().includes(searchLower) ||
       product.description.toLowerCase().includes(searchLower)
     );
+  }
+
+  /* F4 */
+  navigateToAddProduct(): void {
+    console.log('Boton agregar');
+    this.router.navigate(['/products/add']);
   }
 }

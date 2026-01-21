@@ -25,9 +25,21 @@
 }
 
 .search-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   max-width: 1000px;
   margin: 0 auto 1rem auto;
   padding: 0 20px;
+}
+
+.add-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #ffed00;
+  color: #0f265c;
 }
 
 .search-input {

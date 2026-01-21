@@ -1,0 +1,69 @@
+<div class="form-container">
+  <div class="form-card">
+  <h2 class="form-title">Formulario de Registro</h2>
+  <hr class="divider">
+
+  <form class="registration-form" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+      
+      <div class="form-group">
+        <label>ID</label>
+        <input type="text" class="form-control" formControlName="id" [class.invalid]="isFieldInvalid('id')">
+        <small class="error-text" *ngIf="isFieldInvalid('id')">
+          ID no Válido!
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>Nombre</label>
+        <input type="text" class="form-control" formControlName="name"
+            [class.invalid]="isFieldInvalid('name')">
+        <small class="error-text" *ngIf="isFieldInvalid('name')">
+          Número de caracteres no válidos!
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>Descripción</label>
+        <input type="text" class="form-control" formControlName="description"
+          [class.invalid]="isFieldInvalid('description')">
+        <small class="error-text" *ngIf="isFieldInvalid('description')">
+          Número de caracteres no válidos!
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>Logo</label>
+        <input type="text" class="form-control" formControlName="logo"
+          [class.invalid]="isFieldInvalid('logo')">
+        <small class="error-text" *ngIf="isFieldInvalid('logo')">
+          Este campo es requerido!
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>Fecha Liberación</label>
+        <input type="date" class="form-control" formControlName="date_release"
+          [class.invalid]="isFieldInvalid('date_release')">
+        <small class="error-text" *ngIf="isFieldInvalid('date_release')">
+          Este campo es requerido y la fecha debe ser igual o mayor a la fecha actual
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>Fecha Revisión</label>
+        <input type="date" class="form-control" formControlName="date_revision"
+          [class.invalid]="isFieldInvalid('date_revision')">
+        <small class="error-text" *ngIf="isFieldInvalid('date_revision')">
+          Requerido, la fecha debe ser exactamente un año posterior a la fecha de liberación
+        </small>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary">Reiniciar</button>
+      <button type="submit" class="btn btn-primary">Enviar</button>
+    </div>
+  </form>
+  </div>
+</div>
