@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductsService } from '../../services/products.service';
 import { Product } from '../../models/product.model';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-form',
@@ -15,15 +16,23 @@ export class ProductFormComponent implements OnInit {
   modalTitle = '';
   modalMessage = '';
   modalType: 'success' | 'error' | 'warning' = 'success';
+  isEditMode = false;
+  productId: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private productsService: ProductsService,
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
     this.initForm();
-    this.setDateRelease();
+    this.checkEditMode();
+    if (!this.isEditMode) {
+      this.setDateRelease();
+    }
   }
 
   private initForm(): void {
@@ -78,37 +87,96 @@ export class ProductFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.productForm.valid) {
-      const productData: Product = this.productForm.value;
-      console.log('Datos del producto:', productData);
-      this.productsService.createProduct(productData).subscribe({
-        next: (response) => {
-          this.modalTitle = '¡Éxito!';
-          this.modalMessage = response.message;
-          this.modalType = 'success';
-          this.showModal = true;
-          this.productForm.reset();
-        },
-        error: (error) => {
-          this.modalTitle = 'Error';
-          this.modalMessage = error.error?.message || 'Error al crear el producto';
-          this.modalType = 'error';
-          this.showModal = true;
-        },
-      });
+      if (this.isEditMode) {
+        this.editRegister();
+      } else {
+        this.createRegister();
+      }
     } else {
-      this.modalTitle = 'Formulario inválido';
-      this.modalMessage = 'Por favor completa todos los campos correctamente';
-      this.modalType = 'warning';
-      this.showModal = true;
       this.productForm.markAllAsTouched();
+      this.openModal(
+        'Formulario inválido',
+        'Por favor completa todos los campos correctamente',
+        'warning',
+      );
     }
   }
 
+  createRegister() {
+    const productData: Product = this.productForm.value;
+    this.productsService.createProduct(productData).subscribe({
+      next: (response) => {
+        this.openModal('¡Éxito!', response.message, 'success');
+        this.onReset();
+      },
+      error: (error) => {
+        this.openModal('Error', error.error?.message || 'Error al crear el producto', 'error');
+      },
+    });
+  }
+
   onReset(): void {
-    this.productForm.reset();
+    if (this.isEditMode) {
+      this.loadProductForEdit();
+      // const currentId = this.productForm.get('id')?.value;
+      // this.productForm.reset();
+      // this.productForm.patchValue({ id: currentId });
+      // this.productForm.get('id')?.disable();
+    } else {
+      this.productForm.reset();
+    }
   }
 
   closeModal(): void {
     this.showModal = false;
+  }
+
+  private openModal(title: string, message: string, type: 'success' | 'error' | 'warning') {
+    this.modalTitle = title;
+    this.modalMessage = message;
+    this.modalType = type;
+    this.showModal = true;
+    this.cdr.markForCheck();
+  }
+
+  goBack(): void {
+    this.router.navigate(['/products']).then(() => {
+      window.location.reload();
+    });
+  }
+
+  /* F5 */
+  private checkEditMode(): void {
+    this.productId = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!this.productId;
+
+    if (this.isEditMode) {
+      this.loadProductForEdit();
+    }
+  }
+
+  private loadProductForEdit(): void {
+    this.productsService.getProductById(this.productId!).subscribe({
+      next: (product) => {
+        this.productForm.patchValue(product);
+        this.productForm.get('id')?.disable();
+        this.setDateRelease();
+      },
+      error: (error) => console.error('Error loading product:', error),
+    });
+  }
+
+  private editRegister() {
+    const productData = this.productForm.getRawValue();
+    const { id, ...updateData } = productData;
+
+    this.productsService.updateProduct(this.productId!, updateData).subscribe({
+      next: (response) => {
+        this.openModal('¡Éxito!', response.message, 'success');
+      },
+      error: (error) => {
+        this.openModal('Error', error.error?.message || 'Error al actualizar el producto', 'error');
+      },
+    });
   }
 }

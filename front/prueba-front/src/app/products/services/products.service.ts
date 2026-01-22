@@ -21,4 +21,12 @@ export class ProductsService {
   createProduct(product: Product): Observable<CreateProductResponse> {
     return this.http.post<CreateProductResponse>(`${this.baseUrl}/bp/products`, product);
   }
+
+  getProductById(id: string): Observable<Product> {
+    return this.http.get<Product>(`${this.baseUrl}/bp/products/${id}`);
+  }
+
+  updateProduct(id: string, product: Omit<Product, 'id'>): Observable<CreateProductResponse> {
+    return this.http.put<CreateProductResponse>(`${this.baseUrl}/bp/products/${id}`, product);
+  }
 }

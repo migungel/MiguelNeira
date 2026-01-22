@@ -1,5 +1,16 @@
+<!-- Modal -->
+<app-modal
+  *ngIf="showModal"
+  [title]="modalTitle"
+  [message]="modalMessage"
+  [type]="modalType"
+  (close)="closeModal()"
+>
+</app-modal>
+
 <div class="form-container">
   <div class="form-card">
+    <button type="button" class="btn btn-back" (click)="goBack()">← Volver</button>
     <h2 class="form-title">Formulario de Registro</h2>
     <hr class="divider" />
 
@@ -90,12 +101,3 @@
     </form>
   </div>
 </div>
-<!-- Modal -->
-<app-modal
-  [isVisible]="showModal"
-  [title]="modalTitle"
-  [message]="modalMessage"
-  [type]="modalType"
-  (close)="closeModal()"
->
-</app-modal>

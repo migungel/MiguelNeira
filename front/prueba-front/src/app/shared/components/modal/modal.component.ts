@@ -7,7 +7,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrl: './modal.component.css',
 })
 export class ModalComponent {
-  @Input() isVisible = false;
   @Input() title = '';
   @Input() message = '';
   @Input() type: 'success' | 'error' | 'warning' = 'success';

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Product } from '../../models/product.model';
 import { ProductsService } from '../../services/products.service';
 import { Router } from '@angular/router';
@@ -9,21 +9,28 @@ import { Router } from '@angular/router';
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css',
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   filteredProducts: Product[] = [];
   searchField: string = '';
   pageSize: number = 5;
   currentPage: number = 1;
   paginatedProducts: Product[] = [];
+  openDropdownId: string | null = null;
 
   constructor(
     private productsService: ProductsService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     this.loadProducts();
+  }
+
+  ngOnDestroy(): void {
+    this.products = [];
+    this.filteredProducts = [];
+    this.paginatedProducts = [];
   }
 
   /* Paginacion */
@@ -70,11 +77,6 @@ export class ProductListComponent implements OnInit {
       .slice(0, 2);
   }
 
-  formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES');
-  }
-
   onSearchChange(term: string): void {
     this.searchField = term;
     // this.filterProducts();
@@ -82,9 +84,10 @@ export class ProductListComponent implements OnInit {
       this.filteredProducts = this.products;
     } else {
       const searchLower = this.searchField.toLowerCase();
-      this.filteredProducts = this.products.filter(product =>
-        product.name.toLowerCase().includes(searchLower) ||
-        product.description.toLowerCase().includes(searchLower)
+      this.filteredProducts = this.products.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchLower) ||
+          product.description.toLowerCase().includes(searchLower),
       );
     }
     this.currentPage = 1;
@@ -97,9 +100,10 @@ export class ProductListComponent implements OnInit {
       return;
     }
     const searchLower = this.searchField.toLowerCase();
-    this.filteredProducts = this.products.filter(product =>
-      product.name.toLowerCase().includes(searchLower) ||
-      product.description.toLowerCase().includes(searchLower)
+    this.filteredProducts = this.products.filter(
+      (product) =>
+        product.name.toLowerCase().includes(searchLower) ||
+        product.description.toLowerCase().includes(searchLower),
     );
   }
 
@@ -107,5 +111,20 @@ export class ProductListComponent implements OnInit {
   navigateToAddProduct(): void {
     console.log('Boton agregar');
     this.router.navigate(['/products/add']);
+  }
+
+  /* F5 */
+  toggleDropdown(productId: string): void {
+    this.openDropdownId = this.openDropdownId === productId ? null : productId;
+  }
+
+  editProduct(product: Product): void {
+    this.router.navigate(['/products/edit', product.id]);
+    this.openDropdownId = null;
+  }
+
+  deleteProduct(product: Product): void {
+    console.log('Delete product:', product);
+    this.openDropdownId = null;
   }
 }

@@ -5,8 +5,12 @@
   </div>
 </header>
 <div class="search-section">
-  <input type="text" class="search-input" placeholder="Search..."
-    (input)="onSearchChange($event.target.value)"/>
+  <input
+    type="text"
+    class="search-input"
+    placeholder="Search..."
+    (input)="onSearchChange($event.target.value)"
+  />
   <button class="add-button btn btn-primary" (click)="navigateToAddProduct()">Agregar</button>
 </div>
 <div class="table-card">
@@ -18,6 +22,7 @@
         <th>Descripción <i class="info-icon">ℹ️</i></th>
         <th>Fecha de liberación <i class="info-icon">ℹ️</i></th>
         <th>Fecha de reestructuración <i class="info-icon">ℹ️</i></th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -27,8 +32,23 @@
         </td>
         <td>{{ product.name }}</td>
         <td>{{ product.description }}</td>
-        <td>{{ formatDate(product.date_release) }}</td>
-        <td>{{ formatDate(product.date_revision) }}</td>
+        <td>{{ product.date_release | date: 'dd/MM/yyyy' : 'es-ES' }}</td>
+        <td>{{ product.date_revision | date: 'dd/MM/yyyy' : 'es-ES' }}</td>
+        <td>
+          <div class="dropdown" [class.open]="product.id === openDropdownId">
+            <button
+              class="dropdown-btn"
+              (click)="$event.stopPropagation(); toggleDropdown(product.id)"
+            >
+              &#8942;
+            </button>
+
+            <div class="dropdown-menu" *ngIf="product.id === openDropdownId">
+              <button (click)="editProduct(product)">Editar</button>
+              <button (click)="deleteProduct(product)" class="delete-option">Eliminar</button>
+            </div>
+          </div>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -43,19 +63,15 @@
 </div>
 
 <div class="pagination" *ngIf="totalPages > 1">
-  <button 
-    class="page-btn" 
-    [disabled]="currentPage === 1" 
-    (click)="goToPage(currentPage - 1)">
+  <button class="page-btn" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
     Anterior
   </button>
-  <span class="page-info">
-    Página {{ currentPage }} de {{ totalPages }}
-  </span>  
-  <button 
-    class="page-btn" 
-    [disabled]="currentPage === totalPages" 
-    (click)="goToPage(currentPage + 1)">
+  <span class="page-info"> Página {{ currentPage }} de {{ totalPages }} </span>
+  <button
+    class="page-btn"
+    [disabled]="currentPage === totalPages"
+    (click)="goToPage(currentPage + 1)"
+  >
     Siguiente
   </button>
 </div>
