@@ -6,9 +6,10 @@ import { ProductListComponent } from './components/product-list/product-list.com
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { ProductFormComponent } from './components/product-form/product-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared-module';
 
 @NgModule({
   declarations: [ProductListComponent, ProductCardComponent, ProductFormComponent],
-  imports: [CommonModule, ProductsRoutingModule, ReactiveFormsModule],
+  imports: [CommonModule, ProductsRoutingModule, ReactiveFormsModule, SharedModule],
 })
 export class ProductsModule {}
