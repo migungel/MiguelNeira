@@ -21,11 +21,11 @@ export class ProductFormComponent implements OnInit {
   productId: string | null = null;
 
   constructor(
-    private fb: FormBuilder,
-    private productsService: ProductsService,
-    private cdr: ChangeDetectorRef,
-    private router: Router,
-    private route: ActivatedRoute,
+    private readonly fb: FormBuilder,
+    private readonly productsService: ProductsService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
@@ -124,9 +124,6 @@ export class ProductFormComponent implements OnInit {
         this.openModal('¡Éxito!', response.message, 'success');
         this.onReset();
       },
-      error: (error) => {
-        this.openModal('Error', error.error?.message || 'Error al crear el producto', 'error');
-      },
     });
   }
 
@@ -177,7 +174,6 @@ export class ProductFormComponent implements OnInit {
         this.productForm.get('id')?.disable();
         this.setDateRelease();
       },
-      error: (error) => console.error('Error loading product:', error),
     });
   }
 
@@ -188,9 +184,6 @@ export class ProductFormComponent implements OnInit {
     this.productsService.updateProduct(this.productId!, updateData).subscribe({
       next: (response) => {
         this.openModal('¡Éxito!', response.message, 'success');
-      },
-      error: (error) => {
-        this.openModal('Error', error.error?.message || 'Error al actualizar el producto', 'error');
       },
     });
   }

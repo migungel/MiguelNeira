@@ -21,9 +21,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
   productToDelete: Product | null = null;
 
   constructor(
-    private productsService: ProductsService,
-    private router: Router,
-    private cdr: ChangeDetectorRef,
+    private readonly productsService: ProductsService,
+    private readonly router: Router,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -76,7 +76,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   onSearchChange(term: string): void {
     this.searchField = term;
-    // this.filterProducts();
     if (!this.searchField.trim()) {
       this.filteredProducts = this.products;
     } else {
@@ -89,19 +88,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
     }
     this.currentPage = 1;
     this.updatePaginatedProducts();
-  }
-
-  private filterProducts(): void {
-    if (!this.searchField.trim()) {
-      this.filteredProducts = this.products;
-      return;
-    }
-    const searchLower = this.searchField.toLowerCase();
-    this.filteredProducts = this.products.filter(
-      (product) =>
-        product.name.toLowerCase().includes(searchLower) ||
-        product.description.toLowerCase().includes(searchLower),
-    );
   }
 
   /* F4 */
@@ -131,9 +117,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
       this.productsService.deleteProduct(this.productToDelete.id).subscribe({
         next: () => {
           this.loadProducts();
-          this.closeDeleteModal();
-        },
-        error: () => {
           this.closeDeleteModal();
         },
       });

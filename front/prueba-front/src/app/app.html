@@ -1,1 +1,19 @@
 <router-outlet></router-outlet>
+
+<!-- Modal de Error -->
+<div class="modal-overlay" *ngIf="showErrorModal" (click)="closeErrorModal()">
+  <div class="modal-content error" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Error</h3>
+      <button type="button" class="close-btn" (click)="closeErrorModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <p>{{ errorMessage }}</p>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="closeErrorModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
