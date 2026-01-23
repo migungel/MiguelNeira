@@ -2,14 +2,14 @@
 
 > Proyecto frontend en Angular
 
-## 🚀 Instalación y Ejecución
+## Instalación y Ejecución
 
 ### Backend
 
 1. Navega al directorio del backend:
 
    ```bash
-   cd backend
+   cd back/repo-interview-main
    ```
 
 2. Instala las dependencias:
@@ -30,7 +30,7 @@
 1. Navega al directorio del frontend:
 
    ```bash
-   cd frontend
+   cd front/prueba-front
    ```
 
 2. Instala las dependencias:
@@ -46,21 +46,21 @@
 
 La aplicación estará disponible en `http://localhost:4200`
 
-## 🧪 Pruebas
+## Pruebas
 
 Para ejecutar las pruebas unitarias:
 
 ```bash
 # Frontend
-cd frontend
+cd front/prueba-front
 npm test
 ```
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 MiguelNeira/
-├── backend/          # API REST (Node.js)
-├── frontend/         # Aplicación web (Angular)
+├── back/          # API REST (Node.js)
+├── front/         # Aplicación web (Angular)
 └── README.md        # Este archivo
 ```
