@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Product } from '../../models/product.model';
 import { ProductsService } from '../../services/products.service';
 import { Router } from '@angular/router';
@@ -17,10 +17,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
   currentPage: number = 1;
   paginatedProducts: Product[] = [];
   openDropdownId: string | null = null;
+  showDeleteModal = false;
+  productToDelete: Product | null = null;
 
   constructor(
     private productsService: ProductsService,
     private router: Router,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -35,7 +38,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   /* Paginacion */
   onPageSizeChange(size: string): void {
-    console.log('Changing page size to:', size);
     this.pageSize = parseInt(size);
     this.currentPage = 1;
     this.updatePaginatedProducts();
@@ -63,18 +65,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.products = products;
         this.filteredProducts = products;
         this.updatePaginatedProducts();
+        this.cdr.markForCheck();
       },
-      error: (error) => console.error('Error loading products:', error),
     });
   }
 
   getInitials(name: string): string {
-    return name
-      .split(' ')
-      .map((word) => word[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
+    return name.toUpperCase().slice(0, 2);
   }
 
   onSearchChange(term: string): void {
@@ -109,7 +106,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   /* F4 */
   navigateToAddProduct(): void {
-    console.log('Boton agregar');
     this.router.navigate(['/products/add']);
   }
 
@@ -123,8 +119,29 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.openDropdownId = null;
   }
 
+  /* F6 */
   deleteProduct(product: Product): void {
-    console.log('Delete product:', product);
+    this.productToDelete = product;
+    this.showDeleteModal = true;
     this.openDropdownId = null;
+  }
+
+  confirmDelete(): void {
+    if (this.productToDelete) {
+      this.productsService.deleteProduct(this.productToDelete.id).subscribe({
+        next: () => {
+          this.loadProducts();
+          this.closeDeleteModal();
+        },
+        error: () => {
+          this.closeDeleteModal();
+        },
+      });
+    }
+  }
+
+  closeDeleteModal(): void {
+    this.showDeleteModal = false;
+    this.productToDelete = null;
   }
 }

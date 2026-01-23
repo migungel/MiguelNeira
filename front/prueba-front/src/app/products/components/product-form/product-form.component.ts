@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { ProductsService } from '../../services/products.service';
 import { Product } from '../../models/product.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { catchError, map, of } from 'rxjs';
 
 @Component({
   selector: 'app-product-form',
@@ -37,7 +38,11 @@ export class ProductFormComponent implements OnInit {
 
   private initForm(): void {
     this.productForm = this.fb.group({
-      id: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]],
+      id: [
+        '',
+        [Validators.required, Validators.minLength(3), Validators.maxLength(10)],
+        [this.idExistsValidator],
+      ],
       name: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
       description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(200)]],
       logo: ['', Validators.required],
@@ -45,6 +50,16 @@ export class ProductFormComponent implements OnInit {
       date_revision: ['', [Validators.required, this.revisionDateValidator.bind(this)]],
     });
   }
+
+  private idExistsValidator = (control: AbstractControl) => {
+    if (!control.value || this.isEditMode) {
+      return of(null);
+    }
+    return this.productsService.verifyProductId(control.value).pipe(
+      map((exists) => (exists ? { idExists: true } : null)),
+      catchError(() => of(null)),
+    );
+  };
 
   private setDateRelease() {
     this.productForm.get('date_release')?.valueChanges.subscribe((releaseDate) => {

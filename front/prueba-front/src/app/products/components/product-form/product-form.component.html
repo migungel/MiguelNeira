@@ -24,7 +24,14 @@
             formControlName="id"
             [class.invalid]="isFieldInvalid('id')"
           />
-          <small class="error-text" *ngIf="isFieldInvalid('id')"> ID no Válido! </small>
+          <small class="error-text" *ngIf="isFieldInvalid('id')">
+            <span *ngIf="productForm.get('id')?.errors?.['idExists']; else otherErrors">
+              Este ID ya existe
+            </span>
+            <ng-template #otherErrors>
+              <span>ID no Válido!</span>
+            </ng-template>
+          </small>
         </div>
 
         <div class="form-group">

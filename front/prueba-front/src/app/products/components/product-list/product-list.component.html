@@ -28,7 +28,7 @@
     <tbody>
       <tr *ngFor="let product of paginatedProducts">
         <td>
-          <div class="avatar">{{ getInitials(product.name) }}</div>
+          <div class="avatar">{{ getInitials(product.logo) }}</div>
         </td>
         <td>{{ product.name }}</td>
         <td>{{ product.description }}</td>
@@ -75,3 +75,12 @@
     Siguiente
   </button>
 </div>
+
+<!-- Modal de eliminación -->
+<app-modal-delete
+  [isVisible]="showDeleteModal"
+  [productName]="productToDelete?.name || ''"
+  (confirm)="confirmDelete()"
+  (cancel)="closeDeleteModal()"
+>
+</app-modal-delete>

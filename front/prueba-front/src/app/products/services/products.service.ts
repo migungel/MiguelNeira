@@ -29,4 +29,12 @@ export class ProductsService {
   updateProduct(id: string, product: Omit<Product, 'id'>): Observable<CreateProductResponse> {
     return this.http.put<CreateProductResponse>(`${this.baseUrl}/bp/products/${id}`, product);
   }
+
+  deleteProduct(id: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.baseUrl}/bp/products/${id}`);
+  }
+
+  verifyProductId(id: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.baseUrl}/bp/products/verification/${id}`);
+  }
 }

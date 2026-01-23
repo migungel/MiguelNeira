@@ -1,0 +1,14 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="onOverlayClick($event)">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+      <p class="modal-text">
+        ¿Estas seguro de eliminar el producto <strong>{{ productName }}</strong
+        >?
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancelar" (click)="onCancel()">Cancelar</button>
+      <button class="btn btn-confirmar" (click)="onConfirm()">Confirmar</button>
+    </div>
+  </div>
+</div>

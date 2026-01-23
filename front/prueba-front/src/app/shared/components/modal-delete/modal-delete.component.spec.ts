@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProductCardComponent } from './product-card.component';
+import { ModalDeleteComponent } from './modal-delete.component';
 
-describe('ProductCard', () => {
-  let component: ProductCardComponent;
-  let fixture: ComponentFixture<ProductCardComponent>;
+describe('ModalDelete', () => {
+  let component: ModalDeleteComponent;
+  let fixture: ComponentFixture<ModalDeleteComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ProductCardComponent],
+      declarations: [ModalDeleteComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ProductCardComponent);
+    fixture = TestBed.createComponent(ModalDeleteComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

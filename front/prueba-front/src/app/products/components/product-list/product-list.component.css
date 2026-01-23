@@ -80,7 +80,8 @@
   font-style: normal;
   font-size: 0.8rem;
   margin-left: 5px;
-  cursor: help;
+  display: inline;
+  vertical-align: middle;
 }
 
 .products-table td {
