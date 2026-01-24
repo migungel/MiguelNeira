@@ -13,7 +13,7 @@ import { NotificationService } from '../services/notification.service';
   providedIn: 'root',
 })
 export class InterceptorService implements HttpInterceptor {
-  constructor(private notificationService: NotificationService) {}
+  constructor(private readonly notificationService: NotificationService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
