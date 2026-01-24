@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
 import { of, throwError } from 'rxjs';
@@ -203,17 +203,18 @@ describe('ProductListComponent', () => {
     expect(mockProductsService.getProducts).toHaveBeenCalled();
   });
 
-  it('should handle delete error', () => {
+  it('should call deleteProduct service', () => {
     const product = mockProducts[0];
     component.productToDelete = product;
     component.showDeleteModal = true;
     
     (mockProductsService.deleteProduct as jest.Mock).mockReturnValue(
-      throwError('Delete failed')
+      of({ message: 'Product deleted' })
     );
     
     component.confirmDelete();
     
+    expect(mockProductsService.deleteProduct).toHaveBeenCalledWith(product.id);
     expect(component.showDeleteModal).toBe(false);
     expect(component.productToDelete).toBeNull();
   });

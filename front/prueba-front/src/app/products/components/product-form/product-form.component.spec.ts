@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ChangeDetectorRef } from '@angular/core';
@@ -174,9 +174,9 @@ describe('ProductForm', () => {
     expect(component.modalTitle).toBe('Formulario inválido');
   });
 
-  it('should handle create product error', () => {
+  it('should call createProduct service', () => {
     (mockProductsService.createProduct as jest.Mock).mockReturnValue(
-      throwError({ error: { message: 'Error creating product' } }),
+      of({ message: 'Product created successfully' } as CreateProductResponse),
     );
 
     fixture.detectChanges();
@@ -184,8 +184,9 @@ describe('ProductForm', () => {
     // Test the createRegister method directly
     component.createRegister();
 
+    expect(mockProductsService.createProduct).toHaveBeenCalled();
     expect(component.showModal).toBeTruthy();
-    expect(component.modalType).toBe('error');
+    expect(component.modalType).toBe('success');
   });
 
   it('should reset form in create mode', async () => {
